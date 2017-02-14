@@ -24,16 +24,15 @@ public class Client implements Runnable {
 
     public void run() {
         Scanner sc = new Scanner(instr);
-        PrintWriter pw = new PrintWriter(outStr);
-        System.out.println("Введите логин : ");
+        PrintWriter pw = new PrintWriter(outStr, true);
+        pw.printf("Введите логин : ");
         String login = sc.nextLine();
-
+        pw.printf("Добро пожаловать в чат! Ваш логин : " + login + ". Для отключения введите \"Exit\"." + "\n");
         while (sc.hasNextLine()){
             String line = sc.nextLine();
             System.out.println(login + " : " + line);
 
-
-            if (line.equals("closeConnection")){
+            if (line.equals("Exit")){
                 try {
                     instr.close();
                     outStr.close();
