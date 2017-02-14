@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Scanner;
 
 /**
@@ -12,10 +13,12 @@ import java.util.Scanner;
 public class Client implements Runnable {
     private InputStream instr;
     private OutputStream outStr;
+    private Socket sket;
 
-    public Client(InputStream instr, OutputStream outStr) {
-        this.instr = instr;
-        this.outStr = outStr;
+    public Client(Socket s) throws IOException {
+        this.instr = s.getInputStream();
+        this.outStr = s.getOutputStream();
+        this.sket = s;
     }
 
 
@@ -31,6 +34,7 @@ public class Client implements Runnable {
                 try {
                     instr.close();
                     outStr.close();
+                    sket.close();
                 } catch (IOException e) {
 
                 }
@@ -39,10 +43,6 @@ public class Client implements Runnable {
     }
 
     public boolean isClosed(){
-        try {
-            return instr.available() == 0;
-        } catch (IOException e) {
-            return false;
-        }
+        return sket.isClosed();
     }
 }

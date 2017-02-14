@@ -13,13 +13,17 @@ import java.util.List;
 public class Server {
     private static List<Client> list = new ArrayList<Client>();
 
+    static {
+        Thread clientCheker = new Thread(new ClientChecker());
+        clientCheker.start();
+    }
 
     public static ServerSocket createConnection(int port) throws IOException {
         return new ServerSocket(port);
     }
 
     public static void handleClient(Socket s) throws IOException {
-        Client client = new Client(s.getInputStream(), s.getOutputStream());
+        Client client = new Client(s);
         new Thread(client).start();
         list.add(client);
     }
