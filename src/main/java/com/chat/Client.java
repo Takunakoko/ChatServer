@@ -30,6 +30,7 @@ public class Client implements Runnable {
             String line = sc.nextLine();
             System.out.println(line);
 
+
             if (line.equals("closeConnection")){
                 try {
                     instr.close();
