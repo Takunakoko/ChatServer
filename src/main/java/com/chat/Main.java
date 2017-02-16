@@ -11,6 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         ServerSocket sk = Server.createConnection(8080);
+        System.out.println("Server initialized");
         while (true){
             Socket accept = sk.accept();
             Server.handleClient(accept);
