@@ -1,10 +1,14 @@
 package com.chat;
 
+import com.chat.db.UsersDAO;
+import com.chat.db.UsersEntity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -30,7 +34,8 @@ public class Client implements Runnable {
 
         String login = "";
         boolean firstEnter = true;
-        pw.println("Введите логин : ");
+        pw.println("Введите логин: ");
+
         while (sc.hasNextLine()){
             if(firstEnter) {
 
@@ -57,6 +62,20 @@ public class Client implements Runnable {
     public void reciveMessageFromChat(String login, String message) {
         pw.println(login + ": " + message);
         pw.flush();
+    }
+    public boolean auth(String login, String pass) {
+        UsersEntity ue = new UsersEntity();
+
+        try {
+            ue = UsersDAO.getUser(login);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+         if (ue.getPassword().hashCode() == pass.hashCode()) return true;
+
+        return false;
+
     }
 
     public boolean isClosed(){
