@@ -62,6 +62,7 @@ public class Client implements Runnable {
     public void reciveMessageFromChat(String login, String message) {
         pw.println(login + ": " + message);
         pw.flush();
+
     }
     public boolean auth(String login, String pass) {
         UsersEntity ue = new UsersEntity();
