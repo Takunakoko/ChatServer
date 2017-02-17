@@ -11,7 +11,7 @@ import java.util.List;
  * Created by takunaka on 13.02.17.
  */
 public class Server {
-    private static List<Client> list = new ArrayList<Client>();
+    private static List<Client> clientList = new ArrayList<Client>();
 
     static {
         Thread clientCheker = new Thread(new ClientChecker());
@@ -25,18 +25,25 @@ public class Server {
     public static void handleClient(Socket s) throws IOException {
         Client client = new Client(s);
         new Thread(client).start();
-        list.add(client);
+        clientList.add(client);
     }
+
+    public static void sendMessageToChat(String message, String login) {
+        for (Client c : clientList){
+            c.reciveMessageFromChat(login, message);
+        }
+    }
+
     private static class ClientChecker implements Runnable {
 
         public void run() {
             while (true){
                 try {
-                    Thread.currentThread().sleep(5000);
+                    Thread.currentThread().sleep(1000);
                 } catch (InterruptedException e) {
 
                 }
-                Iterator it = list.iterator();
+                Iterator it = clientList.iterator();
                 while (it.hasNext()){
                     Client c = (Client) it.next();
                     if (c.isClosed()){
@@ -46,5 +53,6 @@ public class Server {
             }
         }
     }
+
 
 }

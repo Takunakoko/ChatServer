@@ -14,6 +14,8 @@ public class Client implements Runnable {
     private InputStream instr;
     private OutputStream outStr;
     private Socket sket;
+    private PrintWriter pw;
+
 
     public Client(Socket s) throws IOException {
         this.instr = s.getInputStream();
@@ -24,7 +26,7 @@ public class Client implements Runnable {
 
     public void run() {
         Scanner sc = new Scanner(instr);
-        PrintWriter pw = new PrintWriter(outStr, true);
+        pw = new PrintWriter(outStr, true);
 
         String login = "";
         boolean firstEnter = true;
@@ -38,6 +40,7 @@ public class Client implements Runnable {
             }
             String line = sc.nextLine();
             System.out.println(login + " : " + line);
+            Server.sendMessageToChat(line, login);
 
             if (line.equals("Exit")){
                 try {
@@ -49,6 +52,11 @@ public class Client implements Runnable {
                 }
             }
         }
+    }
+
+    public void reciveMessageFromChat(String login, String message) {
+        pw.println(login + ": " + message);
+        pw.flush();
     }
 
     public boolean isClosed(){
